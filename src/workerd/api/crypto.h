@@ -658,6 +658,14 @@ private:
   }
 };
 
+class SeededPRNG: public jsg::Object {
+public:
+  using Seed = kj::OneOf<kj::String, kj::byte, int, jsg::JsBigInt>;
+  jsg::Ref<Seed> seed;
+  float random();
+  jsg::JsBigInt randomSeed();
+};
+
 // =======================================================================================
 // Crypto
 
@@ -665,9 +673,19 @@ private:
 // https://www.w3.org/TR/WebCryptoAPI/#crypto-interface
 class Crypto: public jsg::Object {
 public:
+  using Seed = kj::OneOf<kj::String, kj::byte, int>;
+  // Type of the `seed` parameter passed to `seededPRNG()`.
+  struct SeedOptions {
+    //
+    jsg::Optional<Seed> seed;
+
+    JSG_STRUCT(seed);
+  };
   jsg::BufferSource getRandomValues(jsg::BufferSource buffer);
 
   kj::String randomUUID();
+
+  jsg::Ref<SeededPRNG> seededPRNG(SeedOptions options);
 
   jsg::Ref<SubtleCrypto> getSubtle() {
     return subtle.addRef();
