@@ -1,0 +1,23 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+# Replaces the crates.io `bssl-sys` placeholder for act-rs and ihat-rs (the `bssl-sys` annotation
+# in build/deps/rust.MODULE.bazel). Generated bindings, so not a wd_rust_crate: its lints are for
+# hand-written code.
+rust_library(
+    name = "bssl-sys",
+    srcs = ["lib.rs"],
+    crate_name = "bssl_sys",
+    edition = "2024",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":layout-check",
+        "@ssl//:crypto",
+    ],
+)
+
+cc_library(
+    name = "layout-check",
+    srcs = ["layout-check.c++"],
+    deps = ["@ssl//:crypto"],
+)

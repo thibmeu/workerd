@@ -16,6 +16,8 @@
 #include <workerd/api/workers-module.h>
 #include <workerd/api/wrapped-binding.h>
 #include <workerd/jsg/modules-new.h>
+#include <workerd/rust/jsg/jsg.h>
+#include <workerd/rust/mole/lib.rs.h>
 
 #include <cloudflare/cloudflare.capnp.h>
 
@@ -50,6 +52,11 @@ class EnvModule final: public jsg::Object {
   }
 };
 
+// `cloudflare:mole` and its native half exist only under the `mole_crypto` flag.
+inline bool isCloudflareModuleEnabled(jsg::Module::Reader module, auto featureFlags) {
+  return module.getName() != "cloudflare:mole"_kj || featureFlags.getMoleCrypto();
+}
+
 template <class Registry>
 void registerModules(
     Registry& registry, auto featureFlags, const node::ModuleSource* nodeModuleSource = nullptr) {
@@ -64,7 +71,13 @@ void registerModules(
   registerSocketsModule(registry, featureFlags);
   registerBase64Module(registry, featureFlags);
   registerMessageChannelModule(registry, featureFlags);
-  registry.addBuiltinBundle(CLOUDFLARE_BUNDLE);
+  registry.addBuiltinBundleFiltered(CLOUDFLARE_BUNDLE,
+      [&](jsg::Module::Reader module) { return isCloudflareModuleEnabled(module, featureFlags); },
+      [&](jsg::Module::Reader module) { registry.addBuiltinModule(module); });
+  if (featureFlags.getMoleCrypto()) {
+    ::workerd::rust::jsg::RustModuleRegistry<Registry, SuppressIoContextScope> r(registry);
+    ::workerd::rust::mole::register_mole_module(r);
+  }
   registerWorkersModule(registry, featureFlags);
   registerTracingModule(registry, featureFlags);
   registerWrappedBindingModule(registry, featureFlags);
@@ -103,7 +116,8 @@ void registerBuiltinModules(jsg::modules::ModuleRegistry::Builder& builder,
   {
     jsg::modules::ModuleBundle::BuiltinBuilder builtinsBuilder(
         jsg::modules::ModuleBundle::BuiltinBuilder::Type::BUILTIN);
-    jsg::modules::ModuleBundle::getBuiltInBundleFromCapnp(builtinsBuilder, CLOUDFLARE_BUNDLE);
+    jsg::modules::ModuleBundle::getBuiltInBundleFromCapnp(builtinsBuilder, CLOUDFLARE_BUNDLE,
+        [&](jsg::Module::Reader module) { return isCloudflareModuleEnabled(module, featureFlags); });
     builder.add(builtinsBuilder.finish());
   }
 
@@ -112,7 +126,13 @@ void registerBuiltinModules(jsg::modules::ModuleRegistry::Builder& builder,
         jsg::modules::ModuleBundle::BuiltinBuilder::Type::BUILTIN_ONLY);
     builtinsBuilder.addObject<EnvModule, TypeWrapper>("cloudflare-internal:env"_url);
     builtinsBuilder.addObject<FileSystemModule, TypeWrapper>("cloudflare-internal:filesystem"_url);
-    jsg::modules::ModuleBundle::getBuiltInBundleFromCapnp(builtinsBuilder, CLOUDFLARE_BUNDLE);
+    if (featureFlags.getMoleCrypto()) {
+      ::workerd::rust::jsg::RustBuiltinModuleAdapter<SuppressIoContextScope> adapter(
+          builtinsBuilder);
+      ::workerd::rust::mole::register_mole_module(adapter);
+    }
+    jsg::modules::ModuleBundle::getBuiltInBundleFromCapnp(builtinsBuilder, CLOUDFLARE_BUNDLE,
+        [&](jsg::Module::Reader module) { return isCloudflareModuleEnabled(module, featureFlags); });
     builder.add(builtinsBuilder.finish());
   }
 }

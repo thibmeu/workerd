@@ -2,7 +2,7 @@
   "binary_crates": [
     "capnpc 0.27.0"
   ],
-  "checksum": "963feda7dd144f6fde41e1dfc484639a8eb4d6d62d3f802b01152f22559cef7e",
+  "checksum": "5c723a3142ba97956e404a2e7b9299cbdef4694584a10b336c2d38dae61c2ab9",
   "conditions": {
     "aarch64-apple-darwin": [
       "aarch64-apple-darwin"
@@ -118,6 +118,10 @@
       "x86_64-apple-darwin",
       "x86_64-unknown-linux-gnu"
     ],
+    "cfg(target_arch = \"aarch64\")": [
+      "aarch64-apple-darwin",
+      "aarch64-unknown-linux-gnu"
+    ],
     "cfg(target_arch = \"wasm32\")": [],
     "cfg(target_os = \"android\")": [],
     "cfg(target_os = \"hermit\")": [],
@@ -151,6 +155,57 @@
     ]
   },
   "crates": {
+    "act-rs 0.1.0": {
+      "common_attrs": {
+        "crate_features": [
+          "boringssl"
+        ],
+        "deps": [
+          {
+            "id": "bssl-sys 0.1.0",
+            "target": "bssl_sys"
+          },
+          {
+            "id": "shake 0.1.0",
+            "target": "shake"
+          },
+          {
+            "id": "subtle 2.6.1",
+            "target": "subtle"
+          },
+          {
+            "id": "zeroize 1.9.1",
+            "target": "zeroize"
+          }
+        ],
+        "edition": "2024"
+      },
+      "library_target_name": "act",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE",
+      "license_ids": [
+        "Apache-2.0"
+      ],
+      "name": "act-rs",
+      "package_url": "https://github.com/Moderation-of-unLinkable-Endorsements/act-rs",
+      "repository": {
+        "Git": {
+          "commitish": {
+            "Rev": "f1bd64b90408677662bb9f96915d8dc0e58e1ad6"
+          },
+          "remote": "https://github.com/Moderation-of-unLinkable-Endorsements/act-rs"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "act",
+            "crate_root": "src/lib.rs"
+          }
+        }
+      ],
+      "version": "0.1.0"
+    },
     "ada-url 4.0.0": {
       "build_script_attrs": {
         "deps": [
@@ -932,10 +987,17 @@
     },
     "block-buffer 0.12.1": {
       "common_attrs": {
+        "crate_features": [
+          "zeroize"
+        ],
         "deps": [
           {
             "id": "hybrid-array 0.4.15",
             "target": "hybrid_array"
+          },
+          {
+            "id": "zeroize 1.9.1",
+            "target": "zeroize"
           }
         ],
         "edition": "2024"
@@ -964,6 +1026,35 @@
         }
       ],
       "version": "0.12.1"
+    },
+    "bssl-sys 0.1.0": {
+      "common_attrs": {
+        "edition": "2021"
+      },
+      "library_target_name": "bssl_sys",
+      "license": "MIT",
+      "license_ids": [
+        "MIT"
+      ],
+      "name": "bssl-sys",
+      "override_targets": {
+        "lib": "@@//src/rust/mole/bssl-sys:bssl-sys"
+      },
+      "repository": {
+        "Http": {
+          "sha256": "312d12393c060384f2e6ed14c7b4be37b3dd90249857485613c1a91b9a1abb5c",
+          "url": "https://static.crates.io/crates/bssl-sys/0.1.0/download"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "bssl_sys",
+            "crate_root": "src/lib.rs"
+          }
+        }
+      ],
+      "version": "0.1.0"
     },
     "bstr 1.13.1": {
       "common_attrs": {
@@ -2701,7 +2792,8 @@
       "common_attrs": {
         "crate_features": [
           "block-api",
-          "default"
+          "default",
+          "zeroize"
         ],
         "deps": [
           {
@@ -2712,6 +2804,10 @@
             "alias": "common",
             "id": "crypto-common 0.2.2",
             "target": "crypto_common"
+          },
+          {
+            "id": "zeroize 1.9.1",
+            "target": "zeroize"
           }
         ],
         "edition": "2024"
@@ -2876,6 +2972,10 @@
       "common_attrs": {
         "deps": [
           {
+            "id": "act-rs 0.1.0",
+            "target": "act"
+          },
+          {
             "id": "ada-url 4.0.0",
             "target": "ada_url"
           },
@@ -2974,6 +3074,10 @@
           {
             "id": "icu_calendar 2.2.1",
             "target": "icu_calendar"
+          },
+          {
+            "id": "ihat-rs 0.1.0",
+            "target": "ec_ihat"
           },
           {
             "id": "ipnet 2.12.2",
@@ -3122,6 +3226,10 @@
           {
             "id": "x509-cert 0.3.0",
             "target": "x509_cert"
+          },
+          {
+            "id": "zeroize 1.9.1",
+            "target": "zeroize"
           }
         ],
         "edition": "2024",
@@ -5990,6 +6098,54 @@
       ],
       "version": "1.0.3"
     },
+    "ihat-rs 0.1.0": {
+      "common_attrs": {
+        "crate_features": [
+          "boringssl"
+        ],
+        "deps": [
+          {
+            "id": "bssl-sys 0.1.0",
+            "target": "bssl_sys"
+          },
+          {
+            "id": "subtle 2.6.1",
+            "target": "subtle"
+          },
+          {
+            "id": "zeroize 1.9.1",
+            "target": "zeroize"
+          }
+        ],
+        "edition": "2024"
+      },
+      "library_target_name": "ec_ihat",
+      "license": "MIT OR Apache-2.0",
+      "license_file": "LICENSE-APACHE",
+      "license_ids": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "name": "ihat-rs",
+      "package_url": "https://github.com/Moderation-of-unLinkable-Endorsements/ihat-rs",
+      "repository": {
+        "Git": {
+          "commitish": {
+            "Rev": "ed756147ac9a1cc530d718e749c0fae8090fda7c"
+          },
+          "remote": "https://github.com/Moderation-of-unLinkable-Endorsements/ihat-rs"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "ec_ihat",
+            "crate_root": "src/lib.rs"
+          }
+        }
+      ],
+      "version": "0.1.0"
+    },
     "indexmap 2.14.2": {
       "common_attrs": {
         "crate_features": [
@@ -6606,6 +6762,51 @@
         }
       ],
       "version": "0.3.107"
+    },
+    "keccak 0.2.2": {
+      "common_attrs": {
+        "deps": {
+          "common": [
+            {
+              "id": "cfg-if 1.0.5",
+              "target": "cfg_if"
+            }
+          ],
+          "selects": {
+            "cfg(target_arch = \"aarch64\")": [
+              {
+                "id": "cpufeatures 0.3.1",
+                "target": "cpufeatures"
+              }
+            ]
+          }
+        },
+        "edition": "2024"
+      },
+      "library_target_name": "keccak",
+      "license": "Apache-2.0 OR MIT",
+      "license_file": "LICENSE-APACHE",
+      "license_ids": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "name": "keccak",
+      "package_url": "https://github.com/RustCrypto/sponges",
+      "repository": {
+        "Http": {
+          "sha256": "d8f198d1db720e4940b5a493201d199d9f24f568f8f746bd13706243a2f71598",
+          "url": "https://static.crates.io/crates/keccak/0.2.2/download"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "keccak",
+            "crate_root": "src/lib.rs"
+          }
+        }
+      ],
+      "version": "0.2.2"
     },
     "kqueue 1.2.1": {
       "common_attrs": {
@@ -10946,6 +11147,52 @@
       ],
       "version": "0.11.0"
     },
+    "shake 0.1.0": {
+      "common_attrs": {
+        "crate_features": [
+          "zeroize"
+        ],
+        "deps": [
+          {
+            "id": "digest 0.11.3",
+            "target": "digest"
+          },
+          {
+            "id": "keccak 0.2.2",
+            "target": "keccak"
+          },
+          {
+            "id": "sponge-cursor 0.1.0",
+            "target": "sponge_cursor"
+          }
+        ],
+        "edition": "2024"
+      },
+      "library_target_name": "shake",
+      "license": "MIT OR Apache-2.0",
+      "license_file": "LICENSE-APACHE",
+      "license_ids": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "name": "shake",
+      "package_url": "https://github.com/RustCrypto/XOFs",
+      "repository": {
+        "Http": {
+          "sha256": "09057cb2149ad4cbd2da1e26b351f9a4c354219421229c69c3063e6f61947c4a",
+          "url": "https://static.crates.io/crates/shake/0.1.0/download"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "shake",
+            "crate_root": "src/lib.rs"
+          }
+        }
+      ],
+      "version": "0.1.0"
+    },
     "shlex 2.0.1": {
       "common_attrs": {
         "crate_features": [
@@ -11334,6 +11581,44 @@
         }
       ],
       "version": "0.8.1"
+    },
+    "sponge-cursor 0.1.0": {
+      "common_attrs": {
+        "crate_features": [
+          "zeroize"
+        ],
+        "deps": [
+          {
+            "id": "zeroize 1.9.1",
+            "target": "zeroize"
+          }
+        ],
+        "edition": "2024"
+      },
+      "library_target_name": "sponge_cursor",
+      "license": "MIT OR Apache-2.0",
+      "license_file": "LICENSE-APACHE",
+      "license_ids": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "name": "sponge-cursor",
+      "package_url": "https://github.com/RustCrypto/utils",
+      "repository": {
+        "Http": {
+          "sha256": "3a0219bd7d979d58245a4f41f695e1ac9f8befdffadd7f61f1bae9e39abc6620",
+          "url": "https://static.crates.io/crates/sponge-cursor/0.1.0/download"
+        }
+      },
+      "targets": [
+        {
+          "Library": {
+            "crate_name": "sponge_cursor",
+            "crate_root": "src/lib.rs"
+          }
+        }
+      ],
+      "version": "0.1.0"
     },
     "stable_deref_trait 1.2.1": {
       "common_attrs": {
@@ -15952,6 +16237,7 @@
     }
   },
   "direct_deps": [
+    "act-rs 0.1.0",
     "ada-url 4.0.0",
     "anyhow 1.0.104",
     "async-trait 0.1.92",
@@ -15978,6 +16264,7 @@
     "hyper 1.12.0",
     "hyper-util 0.1.21",
     "icu_calendar 2.2.1",
+    "ihat-rs 0.1.0",
     "ipnet 2.12.2",
     "libc 0.2.191",
     "libm 0.2.16",
@@ -16015,7 +16302,8 @@
     "tracing 0.1.44",
     "url 2.5.8",
     "windows-sys 0.61.2",
-    "x509-cert 0.3.0"
+    "x509-cert 0.3.0",
+    "zeroize 1.9.1"
   ],
   "direct_dev_deps": [],
   "workspace_members": {

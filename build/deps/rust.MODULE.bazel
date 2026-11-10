@@ -59,6 +59,13 @@ crate.annotation(
     gen_binaries = ["capnpc-rust"],
 )
 
+# bssl-sys is unpublished (crates.io has a placeholder); act-rs and ihat-rs link against workerd's
+# BoringSSL through these bindings instead, so no second BoringSSL is built.
+crate.annotation(
+    crate = "bssl-sys",
+    override_target_lib = "@workerd//src/rust/mole/bssl-sys",
+)
+
 # Header-value leniency patches for the Rust HTTP path (kj-hyper / hyper): KJ, following the
 # browsers' lead, forbids only NUL, CR, and LF in header values, while the `http` crate's
 # HeaderValue constructors and `httparse`'s wire parser additionally reject the other C0

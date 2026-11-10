@@ -124,4 +124,11 @@ windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Network
 notify = "8"
 tracing = { version = "0", default-features = false, features = ["std"] }
 swc_common = "26"
+# cloudflare:mole (src/rust/mole): the MOLE schemes on their BoringSSL backends. Pinned to the
+# revisions guac uses, so the wire formats match. Their `bssl-sys` dependency resolves to a
+# crates.io placeholder; the `bssl-sys` annotation in build/deps/rust.MODULE.bazel replaces it
+# with //src/rust/mole/bssl-sys, bindings to workerd's own BoringSSL.
+act-rs = { git = "https://github.com/Moderation-of-unLinkable-Endorsements/act-rs", rev = "f1bd64b90408677662bb9f96915d8dc0e58e1ad6", default-features = false, features = ["boringssl"] }
+ihat-rs = { git = "https://github.com/Moderation-of-unLinkable-Endorsements/ihat-rs", rev = "ed756147ac9a1cc530d718e749c0fae8090fda7c", default-features = false, features = ["boringssl"] }
+zeroize = { version = "1", default-features = false, features = ["alloc"] }
 swc_ts_fast_strip = "59"

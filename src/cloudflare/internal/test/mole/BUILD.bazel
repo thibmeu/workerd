@@ -1,0 +1,21 @@
+load("//:build/wd_bench.bzl", "wd_bench")
+load("//:build/wd_test.bzl", "wd_test")
+
+wd_test(
+    src = "mole-test.wd-test",
+    args = ["--experimental"],
+    data = [
+        "fixtures.json",
+        "mole-flag-off-test.js",
+        "mole-test.js",
+    ],
+)
+
+wd_bench(
+    src = "mole-bench.wd-bench",
+    args = ["--experimental"],
+    data = [
+        "fixtures.json",
+        "mole-bench.js",
+    ],
+)

@@ -1,0 +1,14 @@
+using Workerd = import "/workerd/workerd.capnp";
+
+const unitTests :Workerd.Config = (
+  services = [(
+    name = "mole-bench",
+    worker = (
+      modules = [
+        (name = "worker", esModule = embed "mole-bench.js"),
+        (name = "fixtures.json", json = embed "fixtures.json"),
+      ],
+      compatibilityFlags = ["mole_crypto"],
+    ),
+  )],
+);

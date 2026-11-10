@@ -1,0 +1,21 @@
+load("//:build/wd_rust_crate.bzl", "wd_rust_crate")
+
+# cloudflare-internal:mole, the native half of cloudflare:mole. See README.md.
+wd_rust_crate(
+    name = "mole",
+    srcs = [
+        "act.rs",
+        "ihat.rs",
+        "lib.rs",
+    ],
+    cxx_bridge_deps = ["//src/rust/jsg"],
+    cxx_bridge_srcs = ["lib.rs"],
+    proc_macro_deps = ["//src/rust/jsg-macros"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src/rust/jsg",
+        "@crates_vendor//:act-rs",
+        "@crates_vendor//:ihat-rs",
+        "@crates_vendor//:zeroize",
+    ],
+)

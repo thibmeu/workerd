@@ -1818,4 +1818,12 @@ struct CompatibilityFlags @0x8f8c1b68151b6cef {
   # The promises returned by a service binding's `scheduled()` and `queue()` methods, available
   # with `service_binding_extra_handlers`, are disposable the same way: disposing one while the
   # event is in flight cancels the event and ends the callee's request.
+
+  moleCrypto @205 :Bool
+      $compatEnableFlag("mole_crypto")
+      $experimental;
+  # Makes `cloudflare:mole` importable. Its `crypto.subtle` runs the EC-IHAT (Anchor commit and
+  # respond, Moderator redemption verification) and ACT (issuance, spend verification, refund,
+  # Client presentation) operations of MOLE natively, on act-rs and ihat-rs over workerd's
+  # BoringSSL. It is not added to the global `crypto.subtle`. See src/rust/mole/README.md.
 }
